@@ -98,6 +98,27 @@ document.addEventListener('DOMContentLoaded', async function() {
       }
     }));
 
+    // Full-resolution replacements supplied for this revision. Keeping these
+    // as regular files avoids another opaque canvas and preserves each image's
+    // natural aspect ratio.
+    const replacementImages = {
+      '4fa654ac-919d-4155-a3d6-7e39155ec4ce': 'assets/aurient-founders-high-res.jpg',
+      '4cb485a3-b7df-436e-8a6f-81a6fcc6f09d': 'assets/usdt0-100b.jpg',
+      '5dd920cd-cb4f-4864-bce7-afa29ebce99d': 'assets/pointless-eyewear.png',
+      '64dc7152-1e41-426f-bf8b-c696ef237cd1': 'assets/zero-global-launch.webp',
+      '3d6018c8-90a2-45e5-aafa-01b9693307f6': 'assets/the-medium-is-not-neutral.jpg',
+      'a2a3bc18-9954-4a61-a5b1-38b71d40562b': 'assets/artist-and-the-machine-grimes.jpg',
+      'ac038ac5-26b5-4352-8d20-613b8422d2a2': 'assets/bloomberg-poseidon.png',
+      '35343f9d-f222-47bd-b4a6-4362799e3ce8': 'assets/poseidon-litepaper.jpg',
+      'b5f67b82-b52f-43de-9f9c-359fc5a646e6': 'assets/digbee-esg.png',
+      '7985d583-e9b4-4c8a-b1f1-eb66b9048951': 'assets/worldremit-cost-of-christmas.jpg',
+      '8c3d90f2-53cb-42fa-b398-4d0dfb03b659': 'assets/summit-bloomberg-nasa.png'
+    };
+    for (const [uuid, path] of Object.entries(replacementImages)) {
+      URL.revokeObjectURL(blobUrls[uuid]);
+      blobUrls[uuid] = path;
+    }
+
     const extResEl = document.querySelector('script[type="__bundler/ext_resources"]');
     const extResources = extResEl ? JSON.parse(extResEl.textContent) : [];
     const resourceMap = {};
@@ -112,6 +133,27 @@ document.addEventListener('DOMContentLoaded', async function() {
     // a null origin, so crossorigin forces a CORS fetch that SRI then rejects.
     // The manifest bytes are ours; SRI protects against CDN compromise, not this.
     template = template.replace(/\s+integrity="[^"]*"/gi, '').replace(/\s+crossorigin="[^"]*"/gi, '');
+
+    const siteOverrides = `<link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gloock&display=swap" rel="stylesheet">
+    <style>
+      :root { --serif: "Gloock", Georgia, serif; }
+      .hero-mark,
+      .hero-statement em,
+      .selects-eyebrow,
+      .thesis .descriptor,
+      .list-eyebrow,
+      .list-block .role em,
+      .footer-note { font-style: normal; }
+      .list-block .role em { font-family: var(--sans); }
+      .footer-note { font-family: var(--serif); }
+      .hero-photo { min-height: 0; }
+      .hero-photo img { position: static; width: 100%; height: auto; object-fit: contain; }
+      .collage figure { background: transparent; }
+      .collage figure:hover img { transform: none; }
+    </style>`;
+    template = template.replace(/<\/head>/i, siteOverrides + '</head>');
 
     const resourceScript = '<script>window.__resources = ' +
       JSON.stringify(resourceMap).split('</' + 'script>').join('<\\/' + 'script>') +
@@ -132,6 +174,46 @@ document.addEventListener('DOMContentLoaded', async function() {
     // createElement so they execute, awaiting onload for src scripts to
     // preserve ordering (React before ReactDOM before Babel before text/babel).
     const doc = new DOMParser().parseFromString(template, 'text/html');
+
+    // Move the existing Bloomberg/Poseidon segment to the former installation
+    // position, and put the new Bloomberg/NASA summit in its earlier slot.
+    doc.querySelector('.hero-byline')?.remove();
+    const selectsDescriptor = doc.querySelector('.thesis .descriptor');
+    if (selectsDescriptor) selectsDescriptor.textContent = 'brands and projects we have brought to market';
+
+    const collageFigures = Array.from(doc.querySelectorAll('.collage figure'));
+    const digbeeFigure = collageFigures.find((figure) => figure.querySelector('img')?.alt === 'Digbee ESG at the G7 Summit');
+    if (digbeeFigure) {
+      digbeeFigure.querySelector('a').href = 'https://www.youtube.com/watch?v=nYwfSB3kCoM';
+    }
+    const grimesFigure = collageFigures.find((figure) => figure.querySelector('img')?.alt === 'Artist and the Machine — summit');
+    if (grimesFigure) {
+      grimesFigure.querySelector('figcaption').textContent = 'Artist and the Machine — Summit';
+    }
+    const bloombergFigure = collageFigures.find((figure) => figure.querySelector('img')?.alt === 'Bloomberg — Poseidon');
+    const installationFigure = collageFigures.find((figure) => figure.querySelector('img')?.alt === 'Installation');
+    if (bloombergFigure && installationFigure) {
+      const marker = doc.createTextNode('');
+      bloombergFigure.replaceWith(marker);
+      installationFigure.replaceWith(bloombergFigure);
+      marker.replaceWith(installationFigure);
+
+      const summitLink = installationFigure.querySelector('a');
+      const summitImage = installationFigure.querySelector('img');
+      const summitCaption = installationFigure.querySelector('figcaption');
+      summitLink.href = 'https://www.bloomberg.com/news/videos/2026-05-29/a-brand-built-on-truth-nasa-in-the-generative-era-video';
+      summitImage.alt = 'Summit – Bloomberg & NASA';
+      summitCaption.textContent = 'Summit – Bloomberg & NASA';
+    }
+
+    const experienceList = doc.querySelectorAll('.list-block ul')[1];
+    if (experienceList) {
+      const experienceItems = Array.from(experienceList.children);
+      const uof = experienceItems.find((item) => item.textContent.includes('UOF'));
+      const wachsman = experienceItems.find((item) => item.textContent.includes('Wachsman'));
+      if (uof && wachsman) experienceList.insertBefore(wachsman, uof);
+    }
+
     document.documentElement.replaceWith(doc.documentElement);
     const dead = Array.from(document.scripts);
     for (const old of dead) {
