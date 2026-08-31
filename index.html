@@ -139,6 +139,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     <link href="https://fonts.googleapis.com/css2?family=Gloock&display=swap" rel="stylesheet">
     <style>
       :root { --serif: "Gloock", Georgia, serif; }
+      nav {
+        padding-left: max(var(--pad), calc((100vw - var(--maxw)) / 2 + var(--pad)));
+        padding-right: max(var(--pad), calc((100vw - var(--maxw)) / 2 + var(--pad)));
+      }
       .hero-mark,
       .hero-statement em,
       .selects-eyebrow,
@@ -161,85 +165,144 @@ document.addEventListener('DOMContentLoaded', async function() {
         font-family: var(--serif); font-style: normal; font-weight: 400;
         font-size: clamp(30px, 3.6vw, 48px); line-height: 1;
       }
+      .services-eyebrow,
+      .selects-eyebrow,
+      .list-eyebrow {
+        font-size: clamp(30px, 3.6vw, 48px);
+        line-height: 1;
+        margin-bottom: clamp(22px, 3vw, 36px);
+      }
+      .services-stage { position: relative; max-width: 1260px; margin: 0 auto; }
       .services-grid {
-        --service-gap: clamp(10px, 1.1vw, 16px);
-        display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+        --service-gap: clamp(10px, 1.2vw, 18px);
+        display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-rows: repeat(2, minmax(140px, auto));
         gap: var(--service-gap); align-items: stretch;
       }
       .service-card {
-        position: relative; display: flex; flex-direction: column;
-        min-width: 0; padding: clamp(24px, 2.3vw, 32px) clamp(22px, 2.5vw, 34px) clamp(20px, 2vw, 28px);
-        border: 1.5px solid var(--indigo); border-radius: 32px;
-        background: rgba(255,255,255,0.18); color: var(--indigo);
+        --rest-r: 0deg;
+        position: relative; z-index: 1; isolation: isolate; display: flex; flex-direction: column;
+        align-items: center; justify-content: center; min-width: 0; min-height: clamp(92px, 9vw, 122px);
+        padding: clamp(20px, 2.1vw, 29px) clamp(26px, 4vw, 62px);
+        border: 0; border-radius: 999px;
+        background: transparent; color: var(--indigo); text-align: center;
+        overflow: visible;
+        transform: rotate(var(--rest-r));
+        transition: transform 0.28s ease, box-shadow 0.32s ease, color 0.28s ease, border-radius 0.28s ease, padding 0.28s ease;
       }
-      a.service-card {
-        transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, color 0.22s ease, border-color 0.22s ease;
+      .service-card::before,
+      .service-card::after {
+        content: ''; position: absolute; z-index: -1; pointer-events: none;
+        transition: opacity 0.34s ease, transform 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.34s ease;
       }
-      a.service-card:hover {
-        transform: translateY(-7px);
-        box-shadow: 0 16px 34px rgba(61,31,255,0.16);
-        background: var(--indigo); border-color: var(--indigo); color: #fff;
+      .service-card::before {
+        inset: -34% -18%; border-radius: 50%;
+        background: radial-gradient(ellipse at 50% 50%,
+          rgba(255, 255, 255, 0.92) 0%,
+          rgba(255, 255, 255, 0.62) 34%,
+          rgba(255, 255, 255, 0.3) 54%,
+          rgba(255, 255, 255, 0.09) 69%,
+          rgba(255, 255, 255, 0) 82%);
+        opacity: 1; transform: scale(1); filter: blur(10px);
       }
-      a.service-card:focus-visible { outline: 3px solid var(--indigo); outline-offset: 4px; }
-      .service-card--leadership { grid-column: 1 / span 7; grid-row: 1; }
-      .service-card--founder { grid-column: 8 / span 5; grid-row: 1; }
-      .service-card--brand { grid-column: 1 / span 5; grid-row: 2; }
-      .service-card--gtm { grid-column: 6 / span 7; grid-row: 2; }
+      .service-card::after {
+        inset: 0; border-radius: inherit;
+        background: var(--indigo); opacity: 0; transform: scale(0.94);
+      }
+      .service-card--available:hover,
+      .service-card--available:focus-visible,
+      .service-card--available:active {
+        z-index: 3; transform: translateY(-6px) rotate(0deg) scale(1.015);
+        box-shadow: 0 18px 48px rgba(44, 18, 167, 0.28), 0 0 54px rgba(61, 31, 255, 0.18);
+        color: #fff;
+        border-radius: clamp(38px, 5vw, 64px);
+      }
+      .service-card--available:hover::before,
+      .service-card--available:focus-visible::before,
+      .service-card--available:active::before { opacity: 0; transform: scale(1.07); filter: blur(8px); }
+      .service-card--available:hover::after,
+      .service-card--available:focus-visible::after,
+      .service-card--available:active::after { opacity: 1; transform: scale(1); }
+      .service-card--available { cursor: pointer; }
+      .service-card--available:focus-visible {
+        outline: 0;
+        box-shadow: 0 0 0 4px rgba(61,31,255,0.2), 0 18px 48px rgba(44,18,167,0.28), 0 0 54px rgba(61,31,255,0.18);
+      }
+      .service-card--leadership { grid-column: 1; grid-row: 1; --rest-r: 0deg; --land-r: -8deg; --land-x: -150px; --land-y: -72px; --land-delay: 0ms; }
+      .service-card--founder { grid-column: 2; grid-row: 1; --rest-r: 0deg; --land-r: 6deg; --land-x: 145px; --land-y: -42px; --land-delay: 100ms; }
+      .service-card--brand { grid-column: 1; grid-row: 2; --rest-r: 0deg; --land-r: 7deg; --land-x: -135px; --land-y: 34px; --land-delay: 180ms; }
+      .service-card--gtm { grid-column: 2; grid-row: 2; --rest-r: 0deg; --land-r: -5deg; --land-x: 155px; --land-y: 72px; --land-delay: 270ms; }
       .service-card--disabled {
-        border-color: #b7b2bc; background: #dfdcd5; color: #7e7984;
+        background: transparent; color: #746d82;
         cursor: not-allowed;
       }
-      .service-card--leadership .service-title { font-weight: 700; }
+      .service-card--disabled::before {
+        opacity: 0.62;
+      }
+      .service-card--disabled::after { display: none; }
+      .service-card--disabled:hover {
+        box-shadow: 0 0 42px rgba(79, 59, 126, 0.1);
+        border-radius: clamp(38px, 5vw, 64px);
+      }
       .service-title {
-        margin: 0 0 16px; font-family: var(--serif); font-style: normal;
-        font-size: clamp(23px, 2vw, 30px); font-weight: 400; line-height: 1.08;
+        margin: 0; font-family: var(--serif); font-style: normal;
+        font-size: clamp(22px, 2vw, 30px); font-weight: 400; line-height: 1.08;
         letter-spacing: -0.02em;
       }
       .service-description {
-        margin: 0; font-family: var(--sans); font-size: clamp(16px, 1.25vw, 19px);
-        line-height: 1.48;
+        max-width: 68ch; max-height: 0; margin: 0;
+        overflow: hidden; opacity: 0;
+        font-family: var(--sans); font-size: clamp(14px, 1.15vw, 17px); line-height: 1.45;
+        transform: translateY(-6px);
+        transition: max-height 0.38s cubic-bezier(0.2, 0.8, 0.2, 1), margin 0.28s ease, opacity 0.2s ease, transform 0.28s ease;
+      }
+      .service-card:hover .service-description,
+      .service-card:focus-visible .service-description {
+        max-height: 180px; margin-top: 14px; opacity: 1; transform: translateY(0);
       }
       .service-status {
-        align-self: center; margin-top: auto; padding-top: clamp(22px, 2.2vw, 30px);
-        display: flex; justify-content: center; gap: 7px; white-space: nowrap;
+        margin-top: 9px; display: flex; justify-content: center; gap: 7px; white-space: nowrap;
       }
       .service-chip {
         padding: 0; border: 0;
         font-family: var(--sans); font-size: 12px; line-height: 1;
       }
       .service-chip--waitlisted {
-        padding: 5px 10px; border: 1px solid currentColor; border-radius: 999px;
+        padding: 6px 11px; border: 0; border-radius: 999px;
+        background: rgba(91, 75, 120, 0.11);
+        box-shadow: 0 0 18px rgba(83, 64, 124, 0.11);
       }
       .service-chip + .service-chip::before { content: '•'; margin: 0 8px 0 1px; }
-      .service-card--leadership { --land-x: -54px; --land-y: -44px; --land-r: -1.4deg; --land-delay: 0ms; }
-      .service-card--founder { --land-x: 48px; --land-y: -36px; --land-r: 1.2deg; --land-delay: 90ms; }
-      .service-card--brand { --land-x: -42px; --land-y: 48px; --land-r: 1.1deg; --land-delay: 160ms; }
-      .service-card--gtm { --land-x: 56px; --land-y: 52px; --land-r: -1.2deg; --land-delay: 230ms; }
       .services-motion-ready .service-card { opacity: 0; }
       .services-motion-ready.services-settled .service-card {
         opacity: 1;
-        animation: service-land 880ms cubic-bezier(0.18, 0.84, 0.22, 1) var(--land-delay) backwards;
+        animation: service-vision-snap 860ms cubic-bezier(0.16, 0.88, 0.24, 1.16) var(--land-delay) backwards;
       }
-      @keyframes service-land {
+      @keyframes service-vision-snap {
         0% {
-          opacity: 0;
-          transform: translate3d(var(--land-x), var(--land-y), 0) rotate(var(--land-r)) scale(0.95);
+          opacity: 0; transform: translate3d(var(--land-x), var(--land-y), 0) rotate(var(--land-r)) scale(0.56);
         }
-        68% {
-          opacity: 1;
-          transform: translate3d(0, -7px, 0) rotate(0deg) scale(1.012);
+        70% {
+          opacity: 1; transform: translate3d(-5px, 4px, 0) rotate(0deg) scale(1.035);
         }
-        84% { transform: translate3d(0, 2px, 0) rotate(0deg) scale(0.997); }
-        100% { opacity: 1; transform: none; }
+        86% { transform: translate3d(2px, -1px, 0) rotate(var(--rest-r)) scale(0.992); }
+        100% { opacity: 1; transform: rotate(var(--rest-r)); }
       }
       @media (prefers-reduced-motion: reduce) {
+        .services *, .services *::before, .services *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
         .services-motion-ready .service-card,
         .services-motion-ready.services-settled .service-card { opacity: 1; animation: none; }
       }
       @media (max-width: 680px) {
-        .services-grid { grid-template-columns: 1fr; }
+        .services-grid { grid-template-columns: 1fr; grid-template-rows: none; }
         .service-card--leadership, .service-card--brand, .service-card--founder,
-        .service-card--gtm { grid-column: 1; grid-row: auto; }
+        .service-card--gtm {
+          grid-column: 1; grid-row: auto; min-height: 0; align-items: center;
+          padding: 24px; border-radius: 30px; text-align: center; transform: none;
+        }
+        .service-card--available:hover,
+        .service-card--available:focus-visible { transform: translateY(-3px); }
+        .service-status { align-self: center; margin-top: 18px; }
       }
       .collage figure { background: transparent; }
       .collage figure:hover img { transform: none; }
@@ -279,27 +342,29 @@ document.addEventListener('DOMContentLoaded', async function() {
     servicesSection.setAttribute('aria-labelledby', 'services-title');
     servicesSection.innerHTML = `
       <h2 class="services-eyebrow" id="services-title">Services</h2>
-      <div class="services-grid">
-        <article class="service-card service-card--leadership service-card--disabled" aria-disabled="true">
-          <h3 class="service-title">Fractional Marketing Leadership</h3>
-          <p class="service-description">For when you need the experience of a VP, ownership of an internal team member, and the pace of execution that lean teams depend on.</p>
-          <div class="service-status"><span class="service-chip service-chip--waitlisted">Waitlisted</span></div>
-        </article>
-        <a class="service-card service-card--founder" href="https://syd2r2x2moa.typeform.com/to/P3IKRAdm" target="_blank" rel="noopener">
-          <h3 class="service-title">Founder Positioning</h3>
-          <p class="service-description">Advising founders on what they can credibly own, where their point of view should live, and how to carry it across owned and earned media.</p>
-          <div class="service-status"><span class="service-chip">Sprint</span><span class="service-chip">Ongoing</span></div>
-        </a>
-        <a class="service-card service-card--brand" href="https://syd2r2x2moa.typeform.com/to/P3IKRAdm" target="_blank" rel="noopener">
-          <h3 class="service-title">Brand Strategy</h3>
-          <p class="service-description">Narrative, positioning, and concepts to help people understand your project, remember it, and know why it matters.</p>
-          <div class="service-status"><span class="service-chip">Sprint</span><span class="service-chip">Ongoing</span></div>
-        </a>
-        <a class="service-card service-card--gtm" href="https://syd2r2x2moa.typeform.com/to/P3IKRAdm" target="_blank" rel="noopener">
-          <h3 class="service-title">GTM Advisory &amp; Execution</h3>
-          <p class="service-description">For new projects and products, choose your level of support, from strategy to execution. We mobilize product, marketing, and comms and sprint with you through launch.</p>
-          <div class="service-status"><span class="service-chip">Sprint</span></div>
-        </a>
+      <div class="services-stage">
+        <div class="services-grid">
+          <article class="service-card service-card--leadership service-card--disabled" aria-disabled="true">
+            <h3 class="service-title">Fractional Marketing Leadership</h3>
+            <p class="service-description">For when you need the experience of a VP, ownership of an internal team member, and the pace of execution that lean teams depend on.</p>
+            <div class="service-status"><span class="service-chip service-chip--waitlisted">Waitlisted</span></div>
+          </article>
+          <a class="service-card service-card--available service-card--founder" href="https://syd2r2x2moa.typeform.com/to/P3IKRAdm" target="_blank" rel="noopener">
+            <h3 class="service-title">Founder Positioning</h3>
+            <p class="service-description">Advising founders on what they can credibly own, where their point of view should live, and how to carry it across owned and earned media.</p>
+            <div class="service-status"><span class="service-chip">Sprint</span><span class="service-chip">Ongoing</span></div>
+          </a>
+          <a class="service-card service-card--available service-card--brand" href="https://syd2r2x2moa.typeform.com/to/P3IKRAdm" target="_blank" rel="noopener">
+            <h3 class="service-title">Brand Strategy</h3>
+            <p class="service-description">Narrative, positioning, and concepts to help people understand your project, remember it, and know why it matters.</p>
+            <div class="service-status"><span class="service-chip">Sprint</span><span class="service-chip">Ongoing</span></div>
+          </a>
+          <a class="service-card service-card--available service-card--gtm" href="https://syd2r2x2moa.typeform.com/to/P3IKRAdm" target="_blank" rel="noopener">
+            <h3 class="service-title">GTM Advisory &amp; Execution</h3>
+            <p class="service-description">For new projects and products, choose your level of support, from strategy to execution. We mobilize product, marketing, and comms and sprint with you through launch.</p>
+            <div class="service-status"><span class="service-chip">Sprint</span></div>
+          </a>
+        </div>
       </div>`;
     doc.querySelector('.hero')?.after(servicesSection);
 
@@ -311,6 +376,10 @@ document.addEventListener('DOMContentLoaded', async function() {
     const grimesFigure = collageFigures.find((figure) => figure.querySelector('img')?.alt === 'Artist and the Machine — summit');
     if (grimesFigure) {
       grimesFigure.querySelector('figcaption').textContent = 'Artist and the Machine — Summit';
+    }
+    const mediumFigure = collageFigures.find((figure) => figure.querySelector('img')?.alt === 'The Medium Is Not Neutral');
+    if (mediumFigure) {
+      mediumFigure.querySelector('a').href = 'https://artistandthemachine.com/reports/THE-MEDIUM-IS-NOT-NEUTRAL.pdf';
     }
     const bloombergFigure = collageFigures.find((figure) => figure.querySelector('img')?.alt === 'Bloomberg — Poseidon');
     const installationFigure = collageFigures.find((figure) => figure.querySelector('img')?.alt === 'Installation');
