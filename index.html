@@ -1202,8 +1202,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--top { border-bottom: 1px solid #000; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--bottom { border-top: 1px solid #000; background: transparent; color: #000; }
-      body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--bottom span:nth-child(2) { text-align: center; }
-      body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--bottom span:last-child { text-align: right; }
+      body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--bottom span:last-child { grid-column: 3; text-align: right; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-home {
         appearance: none; border: 0; padding: 0; background: transparent; color: inherit; cursor: pointer;
         font: 600 14px/1 "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; letter-spacing: 0.08em; text-transform: uppercase;
@@ -1300,7 +1299,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame { flex-basis: 58px; min-height: 58px; padding: 0 16px; gap: 14px; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-meta { display: none; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--bottom { grid-template-columns: 1fr auto; }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--bottom span:nth-child(2) { display: none; }
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--bottom span:last-child { grid-column: 2; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns {
           flex-direction: column; overflow: hidden; overscroll-behavior-y: contain;
           scroll-snap-type: none; scrollbar-width: none; touch-action: pan-y;
@@ -1624,7 +1623,6 @@ document.addEventListener('DOMContentLoaded', async function() {
       <main class="aurient-rebuild-columns" aria-label="Aurient chapters"></main>
       <footer class="aurient-rebuild-frame aurient-rebuild-frame--bottom">
         <span>LDF × Emma Joelle</span>
-        <span>Lisbon / Global</span>
         <span>thank u for visiting :)</span>
       </footer>`;
 
