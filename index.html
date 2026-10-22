@@ -1597,8 +1597,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     const experienceList = doc.querySelectorAll('.list-block ul')[1];
     if (experienceList) {
       const experienceItems = Array.from(experienceList.children);
+      const digbee = experienceItems.find((item) => item.textContent.includes('Digbee ESG'));
       const uof = experienceItems.find((item) => item.textContent.includes('UOF'));
       const wachsman = experienceItems.find((item) => item.textContent.includes('Wachsman'));
+      const data = doc.createElement('li');
+      data.innerHTML = '<a href="https://www.datafdn.org/" target="_blank" class="name">Data</a><span class="star">✦</span><span class="role">Marketing</span>';
+      if (digbee) digbee.after(data);
+      else experienceList.append(data);
       if (uof && wachsman) experienceList.insertBefore(wachsman, uof);
     }
 
