@@ -1277,8 +1277,8 @@ document.addEventListener('DOMContentLoaded', async function() {
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-service p { max-width: 48ch; margin: 14px 0 0; font: 400 14px/1.45 var(--body-font); opacity: 0.78; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-learn { display: inline-block; margin-top: 16px; font: 500 9px/1 var(--ui-font); letter-spacing: 0.08em; text-transform: uppercase; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-status { align-self: start; border: 1px solid currentColor; padding: 6px 8px; }
-      body[data-layout="column-archive-rebuild"] .aurient-rebuild-projects { display: flex; flex-direction: column; gap: 64px; padding-bottom: 30px; counter-reset: rebuild-project; }
-      body[data-layout="column-archive-rebuild"] .aurient-rebuild-project { position: relative; margin: 0; counter-increment: rebuild-project; }
+      body[data-layout="column-archive-rebuild"] .aurient-rebuild-projects { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 4px; column-gap: 24px; row-gap: 0; align-items: start; --project-gap: 32px; padding-bottom: 30px; counter-reset: rebuild-project; }
+      body[data-layout="column-archive-rebuild"] .aurient-rebuild-project { position: relative; min-width: 0; align-self: start; margin: 0; counter-increment: rebuild-project; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-project::before { content: attr(data-project); display: block; margin-bottom: 10px; font: 500 9px/1 var(--ui-font); letter-spacing: 0.08em; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-project a { display: block; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-project img { display: block; width: 100%; height: auto; max-height: none; object-fit: contain; background: rgba(255,255,255,0.12); transition: transform 0.8s cubic-bezier(0.2,1,0.2,1), filter 0.45s ease; }
@@ -1372,7 +1372,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-heading-row h2 { font-size: 30px; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-service { grid-template-columns: 28px minmax(0,1fr); }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-status { grid-column: 2; justify-self: start; margin-top: 8px; }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-projects { gap: 42px; }
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-projects { column-gap: 16px; --project-gap: 24px; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-credit .name { font-size: 20px; }
       }
       @media (prefers-reduced-motion: reduce) {
@@ -1598,13 +1598,23 @@ document.addEventListener('DOMContentLoaded', async function() {
     const experienceList = doc.querySelectorAll('.list-block ul')[1];
     if (experienceList) {
       const experienceItems = Array.from(experienceList.children);
-      const digbee = experienceItems.find((item) => item.textContent.includes('Digbee ESG'));
-      const uof = experienceItems.find((item) => item.textContent.includes('UOF'));
-      const wachsman = experienceItems.find((item) => item.textContent.includes('Wachsman'));
+      const findExperience = (name) => experienceItems.find((item) => item.querySelector('.name')?.textContent.trim() === name);
+      const poseidon = findExperience('Poseidon AI');
+      const reddit = findExperience('Reddit');
+      const layerZero = findExperience('LayerZero');
+      const uof = findExperience('UOF');
+      const wachsman = findExperience('Wachsman');
       const data = doc.createElement('li');
       data.innerHTML = '<a href="https://www.datafdn.org/" target="_blank" class="name">Data</a><span class="star">✦</span><span class="role">Marketing</span>';
-      if (digbee) digbee.after(data);
+      if (poseidon) poseidon.after(data);
       else experienceList.append(data);
+      const unchained = doc.createElement('li');
+      unchained.innerHTML = '<a href="https://unchainedcrypto.com/" target="_blank" rel="noopener" class="name">Unchained</a>';
+      if (reddit) reddit.after(...[layerZero, unchained].filter(Boolean));
+      else experienceList.append(unchained);
+      const ventures = Array.from(doc.querySelectorAll('.list-block ul')[0]?.children || []);
+      const featuredExperience = ['USDT0', 'Artist and the Machine'].map((name) => ventures.find((item) => item.querySelector('.name')?.textContent.trim() === name)?.cloneNode(true)).filter(Boolean);
+      experienceList.prepend(...featuredExperience);
       if (uof && wachsman) experienceList.insertBefore(wachsman, uof);
     }
 
@@ -1732,6 +1742,22 @@ document.addEventListener('DOMContentLoaded', async function() {
       projectList.append(project);
     });
     selectsContent.append(projectList);
+    let projectLayoutFrame = 0;
+    const layoutProjects = () => {
+      cancelAnimationFrame(projectLayoutFrame);
+      projectLayoutFrame = requestAnimationFrame(() => {
+        const styles = getComputedStyle(projectList);
+        const rowHeight = parseFloat(styles.gridAutoRows) || 4;
+        const gap = parseFloat(styles.getPropertyValue('--project-gap')) || 32;
+        for (const project of projectList.children) {
+          project.style.gridRowEnd = 'span ' + Math.ceil((project.getBoundingClientRect().height + gap) / rowHeight);
+        }
+      });
+    };
+    const projectLayoutObserver = new ResizeObserver(layoutProjects);
+    projectLayoutObserver.observe(projectList);
+    for (const project of projectList.children) projectLayoutObserver.observe(project);
+    layoutProjects();
 
     const venturesColumn = addRebuildColumn('04', 'Ventures', 'aurient-rebuild-column--ventures');
     const venturesContent = venturesColumn.querySelector('.aurient-rebuild-content');
@@ -1748,7 +1774,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     const experienceColumn = addRebuildColumn('05', 'Experience', 'aurient-rebuild-column--experience');
     const experienceContent = experienceColumn.querySelector('.aurient-rebuild-content');
-    experienceContent.innerHTML = '<div class="aurient-rebuild-heading-row"><h2>Prior experience</h2></div>';
+    experienceContent.innerHTML = '<div class="aurient-rebuild-heading-row"><h2>Experience</h2></div>';
     const experienceCreditList = document.createElement('div');
     experienceCreditList.className = 'aurient-rebuild-credit-list';
     Array.from(originalLists?.querySelectorAll('.list-block')?.[1]?.querySelectorAll('li') || []).forEach((item, index) => {
