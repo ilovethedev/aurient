@@ -1003,7 +1003,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         border-bottom: 1px solid rgba(255,255,255,0.76); white-space: pre; font: 500 10px/1.35 var(--ui-font); letter-spacing: 0.08em; text-transform: uppercase;
       }
       body[data-layout="archive-slider-merge"] .services::before { content: 'AURIENT / SERVICES     EMBEDDED MARKETING\A01—04                  SOFTWARE · HARDWARE · CULTURE'; }
-      body[data-layout="archive-slider-merge"] .services::after { content: 'LDF × EMMA JOELLE                                      LISBON / GLOBAL'; border-top: 1px solid rgba(255,255,255,0.76); border-bottom: 0; }
+      body[data-layout="archive-slider-merge"] .services::after { content: 'EMMA JOELLE × LDF × KRAM                                      LISBON / GLOBAL'; border-top: 1px solid rgba(255,255,255,0.76); border-bottom: 0; }
       body[data-layout="archive-slider-merge"] .services-eyebrow { display: none; }
       body[data-layout="archive-slider-merge"] .services-stage { flex: 1 1 auto; width: 100%; max-width: none; min-height: 0; margin: 0; }
       body[data-layout="archive-slider-merge"] .services-grid { display: flex; width: 100%; height: 100%; min-height: 72vh; gap: 0; align-items: stretch; }
@@ -1628,7 +1628,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       </header>
       <main class="aurient-rebuild-columns" aria-label="Aurient chapters"></main>
       <footer class="aurient-rebuild-frame aurient-rebuild-frame--bottom">
-        <span>LDF × Emma Joelle</span>
+        <span>EMMA JOELLE × LDF × KRAM</span>
         <span>thank u for visiting :)</span>
       </footer>`;
 
@@ -1677,6 +1677,20 @@ document.addEventListener('DOMContentLoaded', async function() {
       ongoingBlock.append(ongoingLabel, introPhoto);
       introEngagements.append(ongoingBlock);
     }
+    const sprintBlock = document.createElement('div');
+    sprintBlock.className = 'aurient-rebuild-engagement aurient-rebuild-engagement--sprint';
+    const sprintLabel = document.createElement('h2');
+    sprintLabel.className = 'aurient-rebuild-engagement-label';
+    sprintLabel.textContent = 'sprint';
+    const sprintPhoto = document.createElement('img');
+    sprintPhoto.className = 'aurient-rebuild-photo';
+    sprintPhoto.src = 'assets/aurient-sprint.jpg';
+    sprintPhoto.alt = 'Man seated on an orange sofa';
+    sprintPhoto.width = 1600;
+    sprintPhoto.height = 1200;
+    sprintPhoto.decoding = 'async';
+    sprintBlock.append(sprintLabel, sprintPhoto);
+    introEngagements.append(sprintBlock);
     introContent.append(introTitle, introStatement, introEngagements, introCta);
 
     const servicesColumn = addRebuildColumn('02', 'Services', 'aurient-rebuild-column--services');
