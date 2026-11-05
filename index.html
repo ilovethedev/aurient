@@ -1299,75 +1299,27 @@ document.addEventListener('DOMContentLoaded', async function() {
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-credit .role { font: 400 9px/1.3 var(--ui-font); letter-spacing: 0.06em; text-transform: uppercase; }
 
       @media (max-width: 1024px) {
+        body[data-layout="column-archive-rebuild"] { width: auto; height: auto; overflow: visible; }
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell { position: relative; inset: auto; width: 100%; height: auto; min-height: 100svh; overflow: visible; }
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-canvas { position: fixed; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame { flex-basis: 58px; min-height: 58px; padding: 0 16px; gap: 14px; }
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--top {
+          position: sticky; top: 0; grid-template-columns: 1fr auto; background: rgba(255,255,255,0.92);
+        }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-meta { display: none; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--bottom { grid-template-columns: 1fr auto; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-frame--bottom span:last-child { grid-column: 2; }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns {
-          flex-direction: column; overflow: hidden; overscroll-behavior-y: contain;
-          scroll-snap-type: none; scrollbar-width: none; touch-action: pan-y;
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns { display: block; overflow: visible; }
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column {
+          width: 100%; height: auto; overflow: visible; border-right: 0; transition: none;
         }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-columns {
-          overflow-y: auto; overflow-x: hidden; scroll-snap-type: y mandatory;
-        }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns::after {
-          content: "Swipe to unfurl ↓"; position: absolute; z-index: 8; right: 14px; bottom: 12px;
-          font: 500 8px/1 var(--ui-font); letter-spacing: 0.08em; text-transform: uppercase;
-          opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-        }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell:not(.is-mobile-reading) .aurient-rebuild-columns::after { opacity: 0.62; }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns::-webkit-scrollbar { display: none; }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column.is-active,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns:hover .aurient-rebuild-column,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns .aurient-rebuild-column:hover {
-          flex: 1 1 20%; width: 100%; min-height: 0; height: auto; border-right: 0; border-bottom: 1px solid #000;
-          background: transparent; scroll-snap-align: none;
-          transition: flex 0.78s cubic-bezier(0.2,1,0.2,1), min-height 0.78s cubic-bezier(0.2,1,0.2,1), background 0.4s ease;
-        }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-column,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-column.is-active,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-columns:hover .aurient-rebuild-column,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-columns .aurient-rebuild-column:hover {
-          flex: 0 0 100%; min-height: 100%; height: 100%; scroll-snap-align: start; scroll-snap-stop: always;
-        }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-column.is-active,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-columns:hover .aurient-rebuild-column.is-active,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-columns .aurient-rebuild-column.is-active:hover {
-          background: rgba(255,255,255,0.035);
-        }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns:hover .aurient-rebuild-column:not(.aurient-rebuild-column--intro).is-active,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column:not(.aurient-rebuild-column--intro).is-active,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns .aurient-rebuild-column:not(.aurient-rebuild-column--intro).is-active:hover {
-          background: rgba(255,255,255,0.035);
-        }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-trigger,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column.is-active .aurient-rebuild-trigger,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column:hover .aurient-rebuild-trigger { pointer-events: auto; touch-action: pan-y; }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-index { left: 14px; top: 50%; transform: translateY(-50%); }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-vertical-title,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column.is-active .aurient-rebuild-vertical-title,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column:hover .aurient-rebuild-vertical-title {
-          left: 50px; top: 50%; transform: translateY(-50%); opacity: 1; font-size: 16px;
-        }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-column.is-active .aurient-rebuild-vertical-title { opacity: 0; }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-open { left: auto; right: 14px; bottom: 50%; transform: translateY(50%); }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-content,
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column + .aurient-rebuild-column { border-top: 1px solid #000; }
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-trigger { display: none; }
+        body[data-layout="column-archive-rebuild"] .aurient-rebuild-column .aurient-rebuild-content,
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns:hover .aurient-rebuild-column.is-active:not(:hover) .aurient-rebuild-content {
-          padding: 58px 18px 32px; opacity: 0; pointer-events: none; transform: translateY(18px); overscroll-behavior-y: auto;
+          position: static; padding: 40px 18px; overflow: visible;
+          opacity: 1; pointer-events: auto; transform: none; transition: none;
         }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell:not(.is-mobile-reading) .aurient-rebuild-column .aurient-rebuild-content,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell:not(.is-mobile-reading) .aurient-rebuild-column:hover .aurient-rebuild-content {
-          opacity: 0; pointer-events: none; transform: translateY(18px); transition-delay: 0s;
-        }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-column.is-active .aurient-rebuild-content,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-columns:hover .aurient-rebuild-column.is-active:not(:hover) .aurient-rebuild-content {
-          opacity: 1; pointer-events: auto; transform: none;
-        }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-columns:hover .aurient-rebuild-column.is-active:not(:hover) .aurient-rebuild-trigger { pointer-events: auto; }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell.is-mobile-reading .aurient-rebuild-columns:hover .aurient-rebuild-column.is-active:not(:hover) .aurient-rebuild-vertical-title { opacity: 0; }
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell:not(.is-mobile-reading) .aurient-rebuild-column .aurient-rebuild-vertical-title,
-        body[data-layout="column-archive-rebuild"] .aurient-rebuild-shell:not(.is-mobile-reading) .aurient-rebuild-column:hover .aurient-rebuild-vertical-title { opacity: 1; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-wordmark { font-size: clamp(48px,18vw,76px); }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-statement { margin: 18px 0 24px; font-size: 14px; }
         body[data-layout="column-archive-rebuild"] .aurient-rebuild-heading-row { margin-bottom: 28px; }
@@ -1792,8 +1744,6 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     const rebuildColumnItems = Array.from(rebuildShell.querySelectorAll('.aurient-rebuild-column'));
     const mobileRebuildQuery = window.matchMedia('(max-width: 1024px)');
-    const reducedRebuildMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let mobileUnfurlTimer = 0;
     const setRebuildChapter = (target) => {
       rebuildColumnItems.forEach((column) => {
         const active = column === target;
@@ -1801,86 +1751,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         column.querySelector('.aurient-rebuild-trigger')?.setAttribute('aria-expanded', String(active));
       });
     };
-    const showMobileChapterMenu = () => {
-      clearTimeout(mobileUnfurlTimer);
-      rebuildShell.classList.remove('is-mobile-reading', 'is-mobile-unfurling');
-      rebuildColumns.scrollTop = 0;
-      setRebuildChapter(null);
-    };
-    const enterMobileReading = (target = introColumn, behavior = 'smooth') => {
-      clearTimeout(mobileUnfurlTimer);
-      rebuildShell.classList.add('is-mobile-reading', 'is-mobile-unfurling');
-      setRebuildChapter(target);
-      const finishUnfurl = () => {
-        rebuildShell.classList.remove('is-mobile-unfurling');
-        setRebuildChapter(target);
-        rebuildColumns.scrollTo({
-          top: target.offsetTop,
-          behavior: reducedRebuildMotion.matches ? 'auto' : behavior
-        });
-      };
-      if (reducedRebuildMotion.matches) finishUnfurl();
-      else mobileUnfurlTimer = window.setTimeout(finishUnfurl, 800);
-    };
     rebuildColumnItems.forEach((column) => {
-      const trigger = column.querySelector('.aurient-rebuild-trigger');
-      trigger?.addEventListener('click', () => {
-        if (mobileRebuildQuery.matches) {
-          enterMobileReading(column);
-          return;
-        }
+      column.querySelector('.aurient-rebuild-trigger')?.addEventListener('click', () => {
         setRebuildChapter(column);
       });
     });
     rebuildShell.querySelector('.aurient-rebuild-home')?.addEventListener('click', () => {
       if (mobileRebuildQuery.matches) {
-        showMobileChapterMenu();
+        window.scrollTo({ top: 0 });
       } else {
         setRebuildChapter(introColumn);
       }
     });
-    if (mobileRebuildQuery.matches) showMobileChapterMenu();
-    else setRebuildChapter(introColumn);
+    const syncRebuildChapters = () => {
+      setRebuildChapter(mobileRebuildQuery.matches ? null : introColumn);
+    };
+    syncRebuildChapters();
     document.body.prepend(rebuildShell);
-
-    rebuildColumns.addEventListener('wheel', (event) => {
-      if (!mobileRebuildQuery.matches || rebuildShell.classList.contains('is-mobile-reading') || event.deltaY <= 4) return;
-      event.preventDefault();
-      enterMobileReading(introColumn);
-    }, { passive: false });
-
-    let mobileTouchStartY = null;
-    rebuildColumns.addEventListener('touchstart', (event) => {
-      if (!mobileRebuildQuery.matches || rebuildShell.classList.contains('is-mobile-reading')) return;
-      mobileTouchStartY = event.touches[0]?.clientY ?? null;
-    }, { passive: true });
-    rebuildColumns.addEventListener('touchmove', (event) => {
-      if (mobileTouchStartY === null || rebuildShell.classList.contains('is-mobile-reading')) return;
-      const currentY = event.touches[0]?.clientY;
-      if (currentY === undefined || mobileTouchStartY - currentY < 18) return;
-      event.preventDefault();
-      mobileTouchStartY = null;
-      enterMobileReading(introColumn);
-    }, { passive: false });
-    rebuildColumns.addEventListener('touchend', () => { mobileTouchStartY = null; }, { passive: true });
-
-    mobileRebuildQuery.addEventListener('change', (event) => {
-      if (event.matches) showMobileChapterMenu();
-      else {
-        rebuildShell.classList.remove('is-mobile-reading');
-        rebuildColumns.scrollTop = 0;
-        setRebuildChapter(introColumn);
-      }
-    });
-
-    const mobileChapterObserver = new IntersectionObserver((entries) => {
-      if (!mobileRebuildQuery.matches || !rebuildShell.classList.contains('is-mobile-reading') || rebuildShell.classList.contains('is-mobile-unfurling')) return;
-      const mostVisible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (mostVisible && mostVisible.intersectionRatio >= 0.52) setRebuildChapter(mostVisible.target);
-    }, { root: rebuildColumns, threshold: [0.25, 0.52, 0.75] });
-    rebuildColumnItems.forEach((column) => mobileChapterObserver.observe(column));
+    mobileRebuildQuery.addEventListener('change', syncRebuildChapters);
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
