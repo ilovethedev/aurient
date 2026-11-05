@@ -262,6 +262,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       }
       .services-eyebrow, .services-stage { position: relative; z-index: 1; }
       .services-stage { max-width: 1260px; margin: 0 auto; }
+      .services-positioning { max-width: 62ch; margin: 0 auto 32px; font: 400 14px/1.55 var(--body-font); opacity: 0.78; }
       .services-grid {
         --service-gap: clamp(10px, 1.2vw, 18px);
         display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1265,6 +1266,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-heading-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 48px; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-heading-row h2 { margin: 0; font: 500 30px/1.05 "Inter", -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; letter-spacing: -0.025em; text-transform: uppercase; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-heading-row span { font: 500 9px/1 var(--ui-font); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+      body[data-layout="column-archive-rebuild"] .services-positioning { margin: -12px 0 32px; }
       body[data-layout="column-archive-rebuild"] .aurient-rebuild-service {
         position: relative; display: grid; grid-template-columns: 34px minmax(0,1fr) auto; gap: 18px; padding: 24px 0;
         border-top: 1px solid rgba(0,0,0,0.28); color: inherit; transition: padding 0.45s cubic-bezier(0.2,1,0.2,1), background 0.3s ease;
@@ -1527,13 +1529,26 @@ document.addEventListener('DOMContentLoaded', async function() {
     servicesSection.setAttribute('aria-labelledby', 'services-title');
     servicesSection.innerHTML = `
       <h2 class="services-eyebrow" id="services-title">Services</h2>
+      <p class="services-positioning">Typical agencies scope 6–12 month contracts. We scope around business goals, bringing VP-level marketing and comms leadership with the reach of a full marketing department, plus design and PR support as needed.</p>
       <div class="services-stage">
         <div class="services-grid">
-          <a class="service-card service-card--available service-card--gtm" href="https://form.typeform.com/to/yYjVmytE" target="_blank" rel="noopener">
-            <h3 class="service-title">GTM Advisory &amp; Execution</h3>
+          <a class="service-card service-card--available service-card--funding" href="https://form.typeform.com/to/yYjVmytE" target="_blank" rel="noopener">
+            <h3 class="service-title">Funding Announcements</h3>
             <span class="service-learn-more">Learn more</span>
-            <p class="service-description">For new projects and products, choose your level of support, from strategy to execution. We mobilize product, marketing, and comms and sprint with you through launch.</p>
+            <p class="service-description">Turn your funding round into momentum. We shape the story, align your team, and lead the announcement from messaging to rollout, scoped around what your business needs next.</p>
             <div class="service-status"><span class="service-chip">Sprint</span></div>
+          </a>
+          <a class="service-card service-card--available service-card--launch" href="https://form.typeform.com/to/yYjVmytE" target="_blank" rel="noopener">
+            <h3 class="service-title">Product Launches</h3>
+            <span class="service-learn-more">Learn more</span>
+            <p class="service-description">Bring your product to market with a clear story and a coordinated launch. We lead positioning, messaging, and execution in a focused sprint built around your business goals.</p>
+            <div class="service-status"><span class="service-chip">Sprint</span></div>
+          </a>
+          <a class="service-card service-card--available service-card--content" href="https://form.typeform.com/to/yYjVmytE" target="_blank" rel="noopener">
+            <h3 class="service-title">Long Form Content</h3>
+            <span class="service-learn-more">Learn more</span>
+            <p class="service-description">Build authority around the ideas your business needs to own. We turn complex thinking into articles, reports, and thought leadership, with strategy and editorial execution in one team.</p>
+            <div class="service-status"><span class="service-chip">Sprint</span><span class="service-chip">Retainer</span></div>
           </a>
           <article class="service-card service-card--leadership service-card--disabled" aria-disabled="true">
             <h3 class="service-title">Fractional Marketing</h3>
@@ -1541,18 +1556,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             <p class="service-description">For when you need the experience of a VP, ownership of an internal team member, and the pace of execution that lean teams depend on.</p>
             <div class="service-status"><span class="service-chip service-chip--waitlisted">Waitlisted</span></div>
           </article>
-          <a class="service-card service-card--available service-card--founder" href="https://form.typeform.com/to/yYjVmytE" target="_blank" rel="noopener">
-            <h3 class="service-title">Founder Positioning</h3>
-            <span class="service-learn-more">Learn more</span>
-            <p class="service-description">Advising founders on what they can credibly own, where their point of view should live, and how to carry it across owned and earned media.</p>
-            <div class="service-status"><span class="service-chip">Sprint</span><span class="service-chip">Retainer</span></div>
-          </a>
-          <a class="service-card service-card--available service-card--brand" href="https://form.typeform.com/to/yYjVmytE" target="_blank" rel="noopener">
-            <h3 class="service-title">Brand Strategy</h3>
-            <span class="service-learn-more">Learn more</span>
-            <p class="service-description">Narrative, positioning, and concepts to help people understand your project, remember it, and know why it matters.</p>
-            <div class="service-status"><span class="service-chip">Sprint</span><span class="service-chip">Retainer</span></div>
-          </a>
         </div>
       </div>`;
     const hero = doc.querySelector('.hero');
@@ -1723,6 +1726,8 @@ document.addEventListener('DOMContentLoaded', async function() {
       row.innerHTML = `<span class="aurient-rebuild-row-index">0${index + 1}</span><div><h3>${title}</h3><p>${description}</p><span class="aurient-rebuild-learn">Learn more →</span></div><span class="aurient-rebuild-status">${status}</span>`;
       servicesList.append(row);
     });
+    const servicesPositioning = originalServices?.querySelector('.services-positioning')?.cloneNode(true);
+    if (servicesPositioning) servicesContent.append(servicesPositioning);
     servicesContent.append(servicesList);
 
     const selectsColumn = addRebuildColumn('03', 'Selects', 'aurient-rebuild-column--selects');
